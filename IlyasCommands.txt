@@ -1,0 +1,110 @@
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password123!" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2017-latest
+
+az login
+az acr login -n registrypyf5956
+
+
+docker run --network bridge -e SQLFQDN=172.17.0.2 -e SQLUSER=hacker4k0l@msftopenhack6639ops.onmicrosoft.com -e SQLPASS=a\&t\%Fmh3l9jU -e SQLDB=mydrivingDB registrypyf5956.azurecr.io/dataload:1.0
+
+
+docker exec -it sql1 "bash"
+cd opt/mssql-tools/bin
+./sqlcmd -S localhost -U SA -P "password123!"
+
+create database mydrivingDB
+Go
+Exit
+
+docker build -f "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\src\poi\Dockerfile_3" -t "tripinsight/poi:1.0"
+
+docker run -d -p 8080:80 --name poi -e "SQL_PASSWORD=password123!" -e "SQL_SERVER=172.12.0.2" -e "SQL_USER=sa" -e "ASPNETCORE_ENVIRONMENT=Local" tripinsight/poi:1.0
+
+az acr build --registry registrypyf5956 --file "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\dockerfiles\Dockerfile_0" --image tripinsights/user-java:1.0 C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\src\user-java
+
+az acr build --registry registrypyf5956 --file "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\dockerfiles\Dockerfile_1" --image tripinsights/tripviewer:1.0 C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\src\tripviewer
+
+az acr build --registry registrypyf5956 --file "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\dockerfiles\Dockerfile_2" --image tripinsights/userprofile:1.0 C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\src\userprofile
+
+az acr build --registry registrypyf5956 --file "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\dockerfiles\Dockerfile_3" --image tripinsights/poi:1.0 C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\src\poi
+
+az acr build --registry registrypyf5956 --file "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\dockerfiles\Dockerfile_4" --image tripinsights/trips:1.0 C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\src\trips
+
+
+
+
+az aks get-credentials -g Cluster1 -n Cluster1
+
+az aks update -n Cluster1 -g Cluster1 --attach-acr registrypyf5956
+
+kubectl apply -f "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\.azdevops\Kube.yml"
+
+kubectl exec --stdin --tty poi-7bd944766f-65xrv -- /bin/bash
+
+
+
+
+sqlserverpyf5956.database.windows.net
+
+kubectl port-forward node-debugger-aks-nodepool1-12345678-vmss000000-bkmmx 2022:22
+kubectl port-forward poi-5d66b7d869-pzkpl 80:80
+
+docker run --network bridge -e SQLFQDN=sqlserverpyf5956.database.windows.net -e SQLUSER=sqladminpYf5956y -e SQLPASS=Password123! -e SQLDB=mydrivingDB registrypyf5956.azurecr.io/dataload:1.0
+
+az container create -g Cluster1 --name dataload --image openhack/data-load:v1 --secure-environment-variables SQLFQDN=sqlserverpyf5956.database.windows.net SQLUSER=sqladminpYf5956y SQLPASS=Password123! SQLDB=mydrivingDB
+
+echo -n 'Password123!' > ./password.txt
+
+kubectl create secret generic SQL_PASSWORD --from-file=./password.txt
+
+
+
+
+
+kubectl create namespace web
+
+(Create yml file: role-web-namespace.yml)
+
+kubectl apply -f role-web-namespace.yaml
+
+
+kubectl get deploy poi -o yaml
+
+kubectl apply -f "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\namespaces.yml"
+
+-----------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+az aks get-credentials -g RBAC-Cluster-RG -n RBAC-Cluster --admin
+az aks update -n RBAC-Cluster -g RBAC-Cluster-RG --attach-acr registrypyf5956
+az container create -g RBAC-Cluster-RG --name dataload --image openhack/data-load:v1 --secure-environment-variables SQLFQDN=sqlserverpyf5956.database.windows.net SQLUSER=sqladminpYf5956y SQLPASS=Password123! SQLDB=mydrivingDB
+kubectl apply -f "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\namespaces.yml"
+kubectl apply -f "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\deployments_new (3).yaml"
+kubectl apply -f "C:\Users\ilyas\OneDrive\Documents\OpenHack\containers_artifacts\services.yaml"
+
+
+
+
+-----------------------------------------------------------------------------------------------------------
+
+Created KeyVault: RBAC-Cluster-RG-KeyVault
+Added sqlcredential:Password123! secret
+
+
+az aks enable-addons --addons azure-keyvault-secrets-provider --name RBAC-Cluster --resource-group RBAC-Cluster-RG
+kubectl get pods -n kube-system -l "app in (secrets-store-csi-driver, secrets-store-provider-azure)"
+
+az aks show -g RBAC-Cluster-RG -n RBAC-Cluster --query addonProfiles.azureKeyvaultSecretsProvider.identity.clientId -o tsv
+
+clientId: f243604b-4534-43ac-8f99-40c8bcef8f17
+
+# set policy to access keys in your key vault
+az keyvault set-policy -n RBAC-Cluster-RG-KeyVault --key-permissions get --spn f243604b-4534-43ac-8f99-40c8bcef8f17
+# set policy to access secrets in your key vault
+az keyvault set-policy -n RBAC-Cluster-RG-KeyVault --secret-permissions get --spn f243604b-4534-43ac-8f99-40c8bcef8f17
